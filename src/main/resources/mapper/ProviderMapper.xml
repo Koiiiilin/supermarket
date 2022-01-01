@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.lyy.dao.ProviderMapper">
+
+    <!-- 查询用户表记录数 -->
+    <select id="count" resultType="int">
+		select count(1) as count from smbms_provider
+	</select>
+
+    <select id="getProviderList" resultType="Provider">
+		select * from smbms_provider
+	</select>
+	<select id="getProviderByCondition" resultType="Provider">
+		select * from smbms_provider
+		<where>
+			<if test="proCode!=null and proCode!=''">proCode like CONCAT('%',#{proCode},'%')</if>
+			<if test="proName!=null and proName!=''">and proName like CONCAT('%',#{proName},'%')</if>
+		</where>
+	</select>
+
+	<!--实现供应商表的增加操作-->
+	<insert id="addProvider" parameterType="Provider">
+        INSERT INTO smbms_provider(proCode,proName,proDesc,proContact,proPhone,proAddress,proFax)
+		VALUES(#{proCode},#{proName},#{proDesc},#{proContact},#{proPhone},#{proAddress},#{proFax})
+    </insert>
+
+	<select id="findProviderById" resultType="Provider">
+		select * from smbms_provider where id=#{id};
+	</select>
+
+	<update id="updateProvider" parameterType="Provider">
+		update smbms_provider
+		<set>
+			<if test="proCode!=null"> proCode = #{proCode},</if>
+			<if test="proName!=null"> proName = #{proName},</if>
+			<if test="proContact!=null"> proContact = #{proContact},</if>
+			<if test="proPhone!=null"> proPhone = #{proPhone},</if>
+			<if test="proAddress!=null"> proAddress = #{proAddress},</if>
+			<if test="proFax!=null"> proFax = #{proFax}</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<insert id="addProviderandPic" parameterType="Provider">
+        INSERT INTO smbms_provider(proCode,proName,proDesc,proContact,proPhone,proAddress,proFax,createdBy,creationDate,
+        LicPath,orgCodePath)
+		VALUES(#{proCode},#{proName},#{proDesc},#{proContact},#{proPhone},#{proAddress},#{proFax},#{createdBy},#{creationDate},
+		#{LicPath},#{orgCodePath})
+    </insert>
+	<delete id="deletePro">
+    delete from smbms_provider where id=#{id}
+  </delete>
+</mapper>

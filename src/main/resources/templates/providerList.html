@@ -1,0 +1,248 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>超市订单管理系统</title>
+    <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
+    <link type="text/css" rel="stylesheet" href="/static/css/public.css" />
+    <link th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+</head>
+<div th:replace="head::header"></div>
+<div class="right">
+    <div class="location">
+        <strong>你现在所在的位置是:</strong>
+        <span>供应商管理页面</span>
+    </div>
+    <div class="search">
+        <form method="post" action="/pro/pro_byadd">
+            <input name="method" value="query" class="input-text" type="hidden">
+            <span>供应商编号：</span>
+            <input name="proCode" class="input-text" type="text">
+            <span>供应商名称：</span>
+            <input name="proName" class="input-text" type="text">
+            <input type="hidden" name="pageIndex" id="pageIndex" value="1"/>
+            <input	value="查 询" type="submit" id="searchbutton">
+            <a href="/pro/sendToAdd" >添加</a>
+        </form>
+    </div>
+    <!--用户-->
+    <table class="table table-hover" cellpadding="0" cellspacing="0">
+        <tr class="firstTr">
+            <th width="10%">供应商编码</th>
+            <th width="20%">供应商名称</th>
+            <th width="10%">联系人</th>
+            <th width="10%">联系电话</th>
+            <th width="10%">传真</th>
+            <th width="10%">创建时间</th>
+            <th width="30%">操作</th>
+        </tr>
+
+            <tr th:each="pro:${providers}">
+                <td>
+                    <span th:text="${pro.proCode }"></span>
+                </td>
+                <td>
+                    <span th:text="${pro.proName }"></span>
+                </td>
+                <td>
+							<span th:text="${pro.proContact }">
+
+							</span>
+                </td>
+                <td>
+                    <span th:text="${pro.proPhone}"></span>
+                </td>
+                <td>
+                    <span th:text="${pro.proFax}"></span>
+                </td>
+                <td>
+                    <span th:text="${pro.creationDate}"></span>
+                </td>
+                <td>
+            <span><a id="viewPro" href="#" data-toggle="modal"
+         data-target="#myModal"><img src="/static/images/read.png" alt="查看" title="查看"/></a></span>
+                    <span><a class="update" th:href="@{/pro/update_pro(id=${pro.id})}" data-toggle="modal"
+                             data-target="#updateModal"><img src="/static/images/xiugai.png" alt="修改" title="修改"/></a></span>
+                    <form id="deleteForm" th:action="@{/pro/del_pro(id=${pro.id})}" method="post">
+                        <input type="hidden" name="_method" value="DELETE"/>
+                    </form>
+                    <span><a class="deleteBtn" th:href="@{/pro/del_pro(id=${pro.id})}"><img src="/static/images/schu.png" alt="删除" title="删除"/></a></span>
+
+                </td>
+        <!-- 查看用户信息模态框（Modal） -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            供应商信息
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <label>供应商编码：</label>
+                            <span id="userCode" th:text="${pro.proCode}"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label>供应商名称：</label>
+                            <span  th:text="${pro.proName}"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label>联系人：</label>
+                            <span th:text="${pro.proContact}"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label>联系电话：</label>
+                            <span th:text="${pro.proPhone}"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label>联系地址：</label>
+                            <span th:text="${pro.proAddress}"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label>传真：</label>
+                            <span th:text="${pro.proFax}"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+
+        </div>
+
+        <!-- 修改供应商信息模态框（Modal） -->
+        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="updateModalLabel">
+                            修改供应商信息
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{/pro/update_pro(id=${pro.id})}" method="post">
+                            <div class="form-group">
+                                <label>供应商编码：</label>
+                                <input class="form-control" th:value="${pro.proCode}" name="proCode">
+                            </div>
+                            <div class="form-group">
+                                <label>供应商名称：</label>
+                                <input  class="form-control" th:value="${pro.proName}" name="proName">
+                            </div>
+                            <div class="form-group">
+                                <label>联系人：</label>
+                                <input  class="form-control" th:value="${pro.proContact}" name="proContact">
+                            </div>
+                            <div class="form-group">
+                                <label>联系电话：</label>
+                                <input class="form-control" th:value="${pro.proPhone}" name="proPhone">
+                            </div>
+                            <div class="form-group">
+                                <label>联系地址：</label>
+                                <input class="form-control" th:value="${pro.proAddress}" name="proAddress">
+                            </div>
+                            <div class="form-group">
+                                <label>传真：</label>
+                                <input class="form-control" th:value="${pro.proFax}" name="proFax">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" >保存</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+
+        </tr>
+
+        </th:forEach>
+    </table>
+    <!-- 显示分页信息 -->
+    <div class="row">
+        <!--分页文字信息  -->
+        <div class="col-md-6" id="page_info_area">
+            当前<span th:text="${pageInfo.pageNum}"></span>页，
+            总<span th:text="${pageInfo.pages}"></span>页，
+            总<span th:text="${pageInfo.total}"></span>条记录
+        </div>
+        <!-- 分页条信息 -->
+        <div class="col-md-6" id="page_nav_area">
+            <ul class="pagination">
+                <li><a th:href="@{/pro/findPros(pn=${pageInfo.getFirstPage()})}">首页</a></li>
+                <li><a th:href="@{/pro/findPros(pn=${pageInfo.getPrePage()})}">&laquo;</a></li>
+                <li th:each="p : ${pageInfo.navigatepageNums}">
+                    <a th:text="${p}" th:href="@{/pro/findPros(pn=${p})}"> </a>
+                </li>
+                <li><a th:href="@{/pro/findPros(pn=${pageInfo.getLastPage()})}">末页</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</section>
+
+<!--点击删除按钮后弹出的页面-->
+<div class="zhezhao"></div>
+<div class="remove" id="removeUse">
+    <div class="removerChid">
+        <h2>提示</h2>
+        <div class="removeMain">
+            <p>你确定要删除该供应商吗？</p>
+            <a href="#" id="yes">确定</a>
+            <a href="#" id="no">取消</a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="foot::footer"></div>
+<script>
+    $('.update').click(function () {
+        $link =$(this.href);
+        alert("显示模态框" + $link);
+
+        $('#updateModal').on(function () {
+            //需要异步获取员工数据和部门数据，可以单独封装函数
+            $.ajax({
+                //请求方式
+                type : "POST",
+                //请求的媒体类型
+                contentType: "application/json;charset=UTF-8",
+                //请求地址
+                url : $link,
+                //数据，json字符串
+                //data : JSON.stringify(list),
+                //请求成功
+                success : function(result) {
+                    console.log(result);
+                },
+                //请求失败，包含具体的错误信息
+                error : function(e){
+                    console.log(e.status);
+                    console.log(e.responseText);
+                }
+            });
+        });
+    })
+    $(".deleteBtn").click(function() {
+        //1.改变表单的action指向
+        $("#deleteForm").attr("action",this.href);
+        //2.提交表单
+        $("#deleteForm").submit();
+        return false;
+    });
+</script>
+<script type="text/javascript" src="/static/js/userlist.js"></script>
+

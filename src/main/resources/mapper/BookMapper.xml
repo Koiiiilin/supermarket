@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.lyy.dao.BookMapper">
+	<select id="findAllProduct" resultType="com.example.lyy.pojo.Book">
+		select * from t_book
+	</select>
+	<insert id="addOrder">
+		insert into t_order(orderId,createTime,price,status,user_id) values(#{orderId},#{createTime},#{price},#{status},#{userId})
+	</insert>
+	<select id="findOrderbyUid" resultType="com.example.lyy.pojo.Order">
+		select * from t_order where user_id = #{id}
+	</select>
+	<select id="findBookByid" resultType="com.example.lyy.pojo.Book">
+		select * from t_book where id =#{id}
+	</select>
+	<insert id="addTocart">
+		insert into t_order_item(name,count,price,totalPrice,order_id) values (#{name},#{count},#{price},#{totalPrice},#{orderId})
+	</insert>
+	<select id="findOrderItembyid" resultType="com.example.lyy.pojo.OrderItem">
+		select * from t_order_item where orderId = #{orderId}
+	</select>
+
+</mapper>

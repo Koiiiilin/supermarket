@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>超市订单管理系统</title>
+    <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
+    <link type="text/css" rel="stylesheet" href="/static/css/public.css" />
+    <link type="text/css" rel="stylesheet" href="/static/css/layui.css"/>
+    <link th:href="@{/css/bootstrap-3.3.7-dist/css/bootstrap.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div th:fragment="header">
+<!--头部-->
+    <header class="publicHeader">
+        <h1>超市订单管理系统</h1>
+        <div class="publicHeaderR">
+            <p><span>下午好！</span><span style="color: #fff21b" th:text="${session.userinfo.userName}"></span> , 欢迎你！</p>
+            <a th:href="@{/user/logout}">退出</a>
+        </div>
+    </header>
+<!--时间-->
+    <section class="publicTime">
+        <span id="time">2015年1月1日 11:11  星期一</span>
+        <a href="#">温馨提示：为了能正常浏览，请使用高版本浏览器！（IE10+）</a>
+    </section>
+    <!--主体内容-->
+    <section class="publicMian ">
+        <div class="left">
+            <h2 class="leftH2"><span class="span1"></span>功能列表 <span></span></h2>
+            <nav class="nav nav-pills nav-stacked ">
+                <ul class="list" >
+                    <li><a th:href="@{/bill/findBills}">订单管理</a></li>
+                    <li><a th:href="@{/pro/findPros}">供应商管理</a></li>
+                    <li><a th:href="@{/user/findAllByPage}">用户管理</a></li>
+                    <li><a th:href="@{/user/sendToChange}">密码修改</a></li>
+                    <li><a th:href="@{/mail}">发送邮件</a></li>
+                    <li><a th:href="@{/user/logout}">退出系统</a></li>
+                </ul>
+            </nav>
+        </div>
+<!--        <input type="hidden" id="path" name="path" />-->
+<!--        <input type="hidden" id="referer" name="referer" value=""/>-->
+<!--</div>-->
+<!--</body>-->
+
+
+</html>

@@ -1,0 +1,56 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <link type="text/css" rel="stylesheet" href="/static/css/style2.css" >
+    <script type="text/javascript" src="/static/js/jquery-1.8.3.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/css/style.css" />
+    <link th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <style type="text/css">
+        h1 {
+            text-align: center;
+            margin-top: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="header">
+    <img class="logo_img" alt="" src="/static/img/logo.jpg" >
+    <span class="wel_word">我的订单</span>
+
+    <div>
+        <span>欢迎<span class="um_span" th:text="${session.shopInfo.name}"></span>网上书城</span>
+        <a href="/shop/getOrder">我的订单</a>
+        <a href="/shop/shoplogout">注销</a>&nbsp;&nbsp;
+        <a href="/shop/bookList">返回</a>
+    </div>
+
+
+</div>
+
+<div id="main">
+    <table >
+        <tr>
+            <td width="40%">订单号</td>
+            <td width="20%">名称</td>
+            <td width="10%">数量</td>
+            <td width="10%">价格</td>
+            <td width="10%">总计</td>
+        </tr>
+        <tr th:each="item:${items}">
+            <td th:text="${item.orderId}"></td>
+            <td th:text="${item.name}"></td>
+            <td th:text="${item.count}"></td>
+            <td th:text="${item.price}"></td>
+            <td th:text="${item.totalPrice}"></td>
+        </tr>
+    </table>
+   </div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.lyy.dao.BillMapper">
+	<select id="getBillByName" parameterType="String" resultType="Bill">
+		select b.* ,pro.proName providerName from
+		smbms_bill b , smbms_provider pro where
+		pro.id=b.providerId and
+		b.productName like CONCAT('%', #{productName}, '%')
+	</select>
+
+	<select id="getBillByCondition" resultMap="billListInfo" parameterType="String">
+        select b.*,p.*
+        from smbms_bill b,smbms_provider p
+        where productName like CONCAT('%',#{productName},'%')
+        and b.billCode=#{billCode}
+        and b.providerId=p.id
+    </select>
+	<select id="findBills" resultMap="billListInfo">
+		select b.*,p.* from smbms_bill b ,smbms_provider p
+		where b.providerId=p.id
+	</select>
+
+	<resultMap id="billList" type="Bill">
+		<result property="providerName" column="proName"></result>
+	</resultMap>
+
+	<select id="getBillListInfo" resultMap="billListInfo" parameterType="Bill">
+        select b.*,p.*
+        from smbms_bill b,smbms_provider p
+        where b.productName=#{productName}
+        and b.providerId=#{providerId}
+        and b.isPayment=#{isPayment}
+        and b.providerId=p.id
+    </select>
+
+	<update id="updateBill" parameterType="Bill">
+		update smbms_bill
+		<set>
+			<if test="billCode!=null"> billCode = #{billCode},</if>
+			<if test="productName!=null"> productName = #{productName},</if>
+			<if test="productDesc!=null"> productDesc = #{productDesc},</if>
+			<if test="productCount!=null"> productCount = #{productCount},</if>
+			<if test="totalPrice!=null"> totalPrice = #{totalPrice},</if>
+			<if test="isPayment!=null"> isPayment = #{isPayment},</if>
+			<if test="providerId!=null"> providerId = #{providerId}</if>
+		</set>
+		where id=#{id}
+	</update>
+<!--	18211170212 lyy-->
+	<select id="findBillByMap" resultMap="billListInfo">
+		select b.*,p.* from smbms_bill b, smbms_provider p where
+		billCode like CONCAT('%',#{code},'%') and providerId in
+		<foreach collection="id" item="pro" open="(" separator="," close=")">
+			#{pro}
+		</foreach>
+	</select>
+	<resultMap id="billListInfo" type="Bill">
+		<result property="billCode" column="billCode"></result>
+		<result property="productName" column="productName"></result>
+		<result property="totalPrice" column="totalPrice"></result>
+		<result property="isPayment" column="isPayment"></result>
+		<result property="productDesc" column="productDesc"></result>
+		<result property="productCount" column="productCount"></result>
+		<result property="id" column="id"></result>
+		<association property="provider" javaType="com.example.lyy.pojo.Provider">
+			<result property="proCode" column="proCode"></result>
+			<result property="proCode" column="proCode"></result>
+			<result property="proName" column="proName"></result>
+			<result property="proContact" column="proContact"></result>
+			<result property="proPhone" column="proPhone"></result>
+		</association>
+	</resultMap>
+	<delete id="deleteBill">
+		    delete from smbms_bill where id=#{id}
+	</delete>
+
+	<insert id="addBill" parameterType="Bill">
+		INSERT INTO smbms_bill(billCode,productName,productDesc,productCount,totalPrice,providerId,isPayment,creationDate)
+		VALUES(#{billCode},#{productName},#{productDesc},#{productCount},#{totalPrice},#{providerId},#{isPayment},#{creationDate})
+	</insert>
+</mapper>
