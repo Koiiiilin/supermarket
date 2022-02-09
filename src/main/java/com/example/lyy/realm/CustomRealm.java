@@ -3,7 +3,7 @@ package com.example.lyy.realm;
 import com.example.lyy.dao.UserMapper;
 import com.example.lyy.pojo.Perms;
 import com.example.lyy.pojo.User;
-import jdk.nashorn.internal.parser.Token;
+//import jdk.nashorn.internal.parser.Token;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -38,13 +38,13 @@ public class CustomRealm extends AuthorizingRealm {
                 simpleAuthorizationInfo.addRole(role.getName()); //添加角色信息
                 //权限信息
                 List<Perms> perms = userMapper.findPermsByRoleId(role.getId());
-                System.out.println("perms:"+perms);
-                perms.forEach(perms1 ->
-                        System.out.println(perms1.getName()+"-----"+perms1.getUrl()));
+//                System.out.println("perms:"+perms);
+//                perms.forEach(perms1 ->
+//                        System.out.println(perms1.getName()+"-----"+perms1.getUrl()));
                 if(!CollectionUtils.isEmpty(perms) && perms.get(0)!=null ){
                     perms.forEach(perm->{
                         simpleAuthorizationInfo.addStringPermission(perm.getUrl());
-                        System.out.println(simpleAuthorizationInfo.getStringPermissions());
+//                        System.out.println(simpleAuthorizationInfo.getStringPermissions());
                     });
                 }
             });
